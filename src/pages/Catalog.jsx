@@ -1,16 +1,59 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { products } from "../data/product";
+import useCartStore from "../store/useCartStore";
+import CartDrawer from "../components/CartDrawer";
 
 const Catalog = () => {
   const [search, setSearch] = useState("");
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+  const cart = useCartStore((state) => state.cart);
+
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   const filteredProducts = products.filter((product) => {
     return product.name.toLowerCase().includes(search.toLowerCase());
   });
 
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    addToCart(product);
+    setIsCartOpen(true); // Optional: Open cart when adding
+  };
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-6 py-12 relative min-h-screen">
+      {/* Floating Cart Button */}
+      <button
+        onClick={() => setIsCartOpen(true)}
+        className="fixed bottom-6 right-6 z-40 p-3 bg-white/90 backdrop-blur-md border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-full hover:scale-105 active:scale-95 transition-all duration-300 group"
+      >
+        <div className="relative">
+          <svg
+            className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg border-2 border-white">
+              {totalItems}
+            </span>
+          )}
+        </div>
+      </button>
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-5xl font-extrabold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent tracking-tight">
           Discover Excellence
@@ -79,7 +122,7 @@ const Catalog = () => {
                 </span>
               </div>
 
-              <div className="space-y-2 w-full">
+              <div className="space-y-2 w-full flex-1">
                 <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full">
                   {product.category}
                 </span>
@@ -94,21 +137,43 @@ const Catalog = () => {
                 </div>
               </div>
 
-              <div className="mt-6 w-full pt-6 border-t border-gray-100 flex items-center justify-between text-sm font-medium text-gray-500">
-                <span>View Details</span>
-                <svg
-                  className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-blue-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <div className="mt-6 w-full space-y-3">
+                <button
+                  onClick={(e) => handleAddToCart(e, product)}
+                  className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 transform active:scale-95 duration-200"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  Add to Cart
+                </button>
+
+                <div className="w-full pt-3 border-t border-gray-100 flex items-center justify-between text-sm font-medium text-gray-500">
+                  <span>View Details</span>
+                  <svg
+                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </div>
               </div>
             </Link>
           ))}
