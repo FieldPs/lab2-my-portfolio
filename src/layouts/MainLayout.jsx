@@ -10,7 +10,7 @@ const MainLayout = () => {
         <h1 className="text-xl font-bold">My Portfolio</h1>
         <div className="space-x-4 flex items-center">
           <Link to="/" className="hover:text-blue-500">
-            Home
+            Catalog
           </Link>
           <Link to="/projects" className="hover:text-blue-500">
             Projects

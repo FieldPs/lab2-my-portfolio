@@ -1,18 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import MainLayout from "./layouts/MainLayout";
-import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import ProductDetail from "./pages/ProductDetail";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 
 function App() {
-  console.log("App: Rendering");
   return (
     <BrowserRouter>
       <ThemeProvider>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Catalog />} />
+            <Route path="product/:id" element={<ProductDetail />} />
             <Route path="projects" element={<Projects />} />
             <Route path="contact" element={<Contact />} />
           </Route>
