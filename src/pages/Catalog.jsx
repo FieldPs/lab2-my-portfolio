@@ -135,6 +135,12 @@ const Catalog = () => {
                   </span>
                   <span className="text-sm font-medium text-gray-500">THB</span>
                 </div>
+                {cart.find((item) => item.id === product.id) && (
+                  <div className="mt-2 text-sm font-medium text-blue-600 bg-blue-50 inline-block px-3 py-1 rounded-full">
+                    in cart:{" "}
+                    {cart.find((item) => item.id === product.id).quantity}
+                  </div>
+                )}
               </div>
 
               <div className="mt-6 w-full space-y-3">
