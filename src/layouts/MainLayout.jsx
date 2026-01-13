@@ -18,6 +18,9 @@ const MainLayout = () => {
           <Link to="/contact" className="hover:text-blue-500">
             Contact
           </Link>
+          <Link to="/apply" className="hover:text-blue-500">
+            Apply Now
+          </Link>
           <button onClick={toggleDarkMode} className="hover:text-blue-500">
             {darkMode ? "☀️ Light" : "🌙 Dark"}
           </button>
